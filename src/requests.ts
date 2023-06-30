@@ -50,6 +50,11 @@ export async function getPhotosFromRoverWithSolAndPages(roverName: string, camer
 
 export async function getPhotosFromRoverWithPageRange(roverName: string, cameraType: string, sol: number, pageStart: number, pageEnd: number) {
     try {
+        if(pageStart > pageEnd) {
+            throw new Error("start is bigger than end");
+        } else if (pageStart < 0 || pageEnd < 0) {
+            throw new Error("parameter is negative");
+        }
         const resp = await axios.get('https://api.nasa.gov/mars-photos/api/v1/rovers/' +
             roverName + '/photos' + '?sol=' + sol + '&camera=' + cameraType +
             '&api_key=0ph5CMFkcljUN0DfeSUKMSkDY4WsdNtFjAgMVJ0K');
