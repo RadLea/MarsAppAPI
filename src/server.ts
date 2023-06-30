@@ -22,9 +22,15 @@ roverRouter.get('/rovers/:rover_name/photos/:camera_type/:sol/:page', async (req
     res.send(await getPhotosFromRoverWithSolAndPages(req.params['rover_name'], req.params['camera_type'],
         parseInt(req.params['sol']), parseInt(req.params['page'])));
 });
-roverRouter.get('/rovers/:rover_name/photos/:camera_type/:sol/:page_start/:page_end', async (req: Request, res: Response) => {
-    res.send(await getPhotosFromRoverWithPageRange(req.params['rover_name'], req.params['camera_type'],
-        parseInt(req.params['sol']), parseInt(req.params['page_start']), parseInt(req.params['page_end'])));
+roverRouter.get('/rovers/:rover_name/photos/:camera_type/:sol', async (req: Request, res: Response) => {
+    const pageStart =<string> req.query.page_start;
+    const pageEnd=<string> req.query.page_end;
+    if (!!pageStart && !!pageEnd) {
+        res.send(await getPhotosFromRoverWithPageRange(req.params['rover_name'], req.params['camera_type'],
+            parseInt(req.params['sol']), parseInt(pageStart), parseInt(pageEnd)));
+    } else {
+        res.sendStatus(406);
+    }
 });
 app.use('/', roverRouter);
 

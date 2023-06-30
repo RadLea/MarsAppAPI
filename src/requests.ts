@@ -48,8 +48,14 @@ export async function getPhotosFromRoverWithSolAndPages(roverName: string, camer
     }
 }
 
-export async function getPhotosFromRoverWithPageRange(roverName: string, cameraType: string, sol: number, pageStart: number, pageEnd: number) {
+export async function getPhotosFromRoverWithPageRange(roverName: string, cameraType: string, sol: number, pageStart?: number, pageEnd?: number) {
     try {
+        if (pageStart === undefined) {
+            throw new Error("page start is missing, please help");
+        }
+        if (pageEnd === undefined) {
+            throw new Error("page end is missing, please help");
+        }
         if(pageStart > pageEnd) {
             throw new Error("start is bigger than end");
         } else if (pageStart < 0 || pageEnd < 0) {
