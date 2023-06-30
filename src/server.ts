@@ -2,7 +2,7 @@ import {Response, Request} from "express";
 import {
     getRoverList,
     getPhotosFromRover,
-    getPhotosFromRoverWithSolAndPages
+    getPhotosFromRoverWithSolAndPages, getPhotosFromRoverWithPageRange
 } from './requests'
 
 const express = require("express");
@@ -19,7 +19,12 @@ roverRouter.get('/rovers/:rover_name/photos/:camera_type', async (req: Request, 
     res.send(await getPhotosFromRover(req.params['rover_name'], req.params['camera_type']));
 });
 roverRouter.get('/rovers/:rover_name/photos/:camera_type/:sol/:page', async (req: Request, res: Response) => {
-    res.send(await getPhotosFromRoverWithSolAndPages(req.params['rover_name'], req.params['camera_type'], parseInt(req.params['sol']), parseInt(req.params['page'])));
+    res.send(await getPhotosFromRoverWithSolAndPages(req.params['rover_name'], req.params['camera_type'],
+        parseInt(req.params['sol']), parseInt(req.params['page'])));
+});
+roverRouter.get('/rovers/:rover_name/photos/:camera_type/:sol/:page_start/:page_end', async (req: Request, res: Response) => {
+    res.send(await getPhotosFromRoverWithPageRange(req.params['rover_name'], req.params['camera_type'],
+        parseInt(req.params['sol']), parseInt(req.params['page_start']), parseInt(req.params['page_end'])));
 });
 app.use('/', roverRouter);
 

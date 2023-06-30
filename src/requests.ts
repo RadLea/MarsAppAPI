@@ -47,3 +47,14 @@ export async function getPhotosFromRoverWithSolAndPages(roverName: string, camer
         console.error(e);
     }
 }
+
+export async function getPhotosFromRoverWithPageRange(roverName: string, cameraType: string, sol: number, pageStart: number, pageEnd: number) {
+    try {
+        const resp = await axios.get('https://api.nasa.gov/mars-photos/api/v1/rovers/' +
+            roverName + '/photos' + '?sol=' + sol + '&camera=' + cameraType +
+            '&api_key=0ph5CMFkcljUN0DfeSUKMSkDY4WsdNtFjAgMVJ0K');
+        return resp.data.photos.slice(pageStart,pageEnd);
+    } catch (e) {
+        console.error(e);
+    }
+}
