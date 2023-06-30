@@ -1,6 +1,9 @@
 import {Response, Request} from "express";
-import axios from 'axios';
-import { getRoverList, getPhotosFromRover } from './requests'
+import {
+    getRoverList,
+    getPhotosFromRover,
+    getPhotosFromRoverWithSolAndPages
+} from './requests'
 
 const express = require("express");
 const port = 8008;
@@ -14,6 +17,9 @@ roverRouter.get('/rovers', async (req: Request, res: Response) => {
 });
 roverRouter.get('/rovers/:rover_name/photos/:camera_type', async (req: Request, res: Response) => {
     res.send(await getPhotosFromRover(req.params['rover_name'], req.params['camera_type']));
+});
+roverRouter.get('/rovers/:rover_name/photos/:camera_type/:sol/:page', async (req: Request, res: Response) => {
+    res.send(await getPhotosFromRoverWithSolAndPages(req.params['rover_name'], req.params['camera_type'], parseInt(req.params['sol']), parseInt(req.params['page'])));
 });
 app.use('/', roverRouter);
 
