@@ -10,6 +10,8 @@ export interface Rover {
     name: string;
 }
 
+
+
 export async function getRoverList() {
     try {
         const resp = await axios.get(
@@ -19,6 +21,20 @@ export async function getRoverList() {
         });
     } catch (e) {
         console.error(e);
+        return [];
+    }
+}
+
+export async function getCamerasForRover(rover: string) {
+    try {
+        const resp = await axios.get(
+            `https://api.nasa.gov/mars-photos/api/v1/rovers/${rover}?api_key=0ph5CMFkcljUN0DfeSUKMSkDY4WsdNtFjAgMVJ0K`);
+        return resp.data.rover.cameras.map((item: Rover) => {
+            return item.name;
+        });
+    } catch (e) {
+        console.error(e);
+        return [];
     }
 }
 
@@ -32,6 +48,7 @@ export async function getPhotosFromRover(roverName: string, cameraType: string) 
         });
     } catch (e) {
         console.error(e);
+        return [];
     }
 }
 
@@ -48,7 +65,7 @@ export async function getPhotosFromRoverWithSolAndPages(roverName: string, camer
     }
 }
 
-export async function getPhotosFromRoverWithPageRange(roverName: string, cameraType: string, sol: number, pageStart?: number, pageEnd?: number) {
+export async function getPhotosFromRoverWithPageRange(roverName: string, cameraType: string, sol: number, pageStart=0, pageEnd=0) {
     try {
         if(pageStart > pageEnd) {
             throw new Error("start is bigger than end");
